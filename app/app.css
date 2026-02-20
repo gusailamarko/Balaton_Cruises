@@ -1,0 +1,481 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html,
+body {
+  @apply bg-white dark:bg-gray-950;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+
+  scroll-behavior: smooth;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar 
+{
+  width: 5px;
+  height: 5px;
+}
+  
+::-webkit-scrollbar-track 
+{
+  background: #2c2c2c; 
+}
+   
+
+::-webkit-scrollbar-thumb 
+{
+  background: #6cd4d5; 
+}
+  
+::-webkit-scrollbar-thumb:hover 
+{
+  background: #6cd4d5; 
+}
+
+/*HERO SECTION*/
+.heroBg
+{
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/images/Balaton_Bg.jpeg');
+  background-size: cover;
+  background-position: center;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroTexts
+{
+  border: 3px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding: 1rem;
+}
+
+/*HERO, PRICING SECTION - CALL TO ACTION*/
+.ctaButton
+{
+  margin-top: 1rem;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  padding: 0.75rem 1.75rem;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, black, black);
+  box-shadow: 0 10px 28px rgba(79, 70, 229, 0.35);
+  will-change: transform;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctaButton:hover 
+{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+@keyframes pulse 
+{
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.ctaButton::before 
+{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.45),
+    transparent 70%
+  );
+
+  transform: skewX(-20deg);
+  animation: glossSweep 2.8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes glossSweep 
+{
+  0% {
+    left: -120%;
+  }
+  100% {
+    left: 140%;
+  }
+}
+
+.ctaButton-text 
+{
+  display: inline-block;
+  animation: bounceChar 1.6s ease-in-out infinite;
+}
+
+@keyframes bounceChar 
+{
+  0%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-5px);
+  }
+}
+
+.video-content
+{
+  max-height: 20rem;
+  width: auto;
+  border-radius: 10px;
+}
+
+.video-content video
+{
+  height: 100%;
+  width: auto;
+  border-radius: 10px;
+}
+
+/*EXPERIENCE INTRO, FIRST GLANCE SECTION*/
+.experienceIntro
+{
+  display: flex;
+  justify-content: center;
+}
+
+.expIntroText
+{
+  width: 50%;
+}
+
+@media (max-width: 750px)
+{
+  .expIntroText
+  {
+    width: 80%;
+  }
+}
+
+.infBtn
+{
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+.cardContainer
+{
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 80%;
+}
+
+.glanceCard
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  max-width: 350px;
+}
+
+.imgBox
+{
+  max-width: 350px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.imgBox img
+{
+  width: 350px;
+  height: 100%;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/*ROUTE ITINERARY SECTION*/
+.itinerary-content
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: #6cd4d5;
+}
+
+.route
+{
+  width: 90%;
+}
+
+.route img
+{
+  display: block;
+  margin: auto;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid black;
+  background-color: #fff;
+}
+
+.itinerary
+{
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.itineraryCard
+{
+  background-size: cover;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.itineraryCard-content
+{
+  height: 100%;
+  background-color: rgba(138, 114, 114, 0.75);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.itinLI
+{
+  color: black;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/*STOPS SECTION*/
+.carousel-content
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.carousel-container
+{
+  width: 90%;
+  height: 600px;
+  border-radius: 10px;
+}
+
+.carousel-container img
+{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.carousel-prevBtn
+{
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.carousel-nextBtn
+{
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/*BOAT SECTION*/
+.boat-content
+{
+  background-color: #6cd4d5;
+}
+
+.carousel-container-boat
+{
+  border-radius: 10px;
+}
+
+/*PRACTICAL INFO SECTION*/
+.practicalInfo-section
+{
+  background-color: white;
+  color: black;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.infoCard
+{
+  background-color: #6cd4d5;
+  border-radius: 10px;
+  border: 2px solid black;
+  padding: 1rem;
+}
+
+/*PRICING SECTION*/
+.pricing-content
+{
+  background-color: #6cd4d5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.priceCardsScroll 
+{
+  display: flex;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 1rem;
+}
+
+.priceCard
+{
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 1rem;
+  min-width: 250px;
+  max-width: 280px;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  scroll-snap-align: start;
+}
+
+.priceCard-mainseason
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #6cd4d5;
+}
+
+.priceCard-offseason
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #6cd4d5;
+}
+
+/*FOOTER SECTION*/
+.footer
+{
+  background-color: rgb(32,36,37);
+}
+
+/*MODAL & FORM*/
+.modal-backdrop 
+{
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-window 
+{
+  position: relative;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.modalClose
+{
+  font-size: 1.5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.75rem;
+  cursor: pointer;
+}
+
+.modalClose:hover
+{
+  background-color: red;
+  color: black;
+  cursor: pointer;
+  border-top-right-radius: 10px;
+}
+
+label
+{
+  display: block;
+}
+
+.inputField
+{
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.submitBtn
+{
+  display: block;
+  margin: auto;
+  cursor: pointer;
+  background-color: #6cd4d5;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 1rem;
+}
