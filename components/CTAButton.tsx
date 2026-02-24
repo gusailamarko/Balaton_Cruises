@@ -161,9 +161,9 @@ const CTAButton = () => {
       const { data: sea } = await supabase.from("seasons").select("*");
       const { data: pri } = await supabase.from("package_prices").select("*");
 
-      console.log("Fetched packages:", pkg);
-      console.log("Fetched seasons:", sea);
-      console.log("Fetched prices:", pri);
+      //   console.log("Fetched packages:", pkg);
+      //   console.log("Fetched seasons:", sea);
+      //   console.log("Fetched prices:", pri);
 
       if (pkg) setPackages(pkg);
       if (sea) setSeasons(sea);
@@ -184,11 +184,10 @@ const CTAButton = () => {
     const month = date.getMonth() + 1;
     const day = date.getDate();
 
-    console.log("Checking season for date:", date);
-    console.log("Month:", month, "Day:", day);
-    console.log("Available seasons:", seasons);
+    // console.log("Checking season for date:", date);
+    // console.log("Month:", month, "Day:", day);
+    // console.log("Available seasons:", seasons);
 
-    // Öncelikle tanımlı sezonlar içinde ara
     const foundSeason = seasons.find((s) => {
       const startMonth = Number(s.start_month);
       const startDay = Number(s.start_day);
@@ -202,21 +201,20 @@ const CTAButton = () => {
       const beforeEnd =
         month < endMonth || (month === endMonth && day <= endDay);
 
-      console.log(
-        `Checking season ${s.name}: start ${startMonth}/${startDay}, end ${endMonth}/${endDay}`,
-      );
-      console.log("afterStart:", afterStart, "beforeEnd:", beforeEnd);
+      //   console.log(
+      //     `Checking season ${s.name}: start ${startMonth}/${startDay}, end ${endMonth}/${endDay}`,
+      //   );
+      //   console.log("afterStart:", afterStart, "beforeEnd:", beforeEnd);
 
       return afterStart && beforeEnd;
     });
 
     if (foundSeason) {
-      console.log("Season found:", foundSeason.name);
+      //   console.log("Season found:", foundSeason.name);
       return foundSeason;
     }
 
-    // Eğer hiçbiri bulunamadıysa "Off-season" olarak dön
-    console.log("Season not found in defined ranges, returning Off-season");
+    // console.log("Season not found in defined ranges, returning Off-season");
     return { id: null, name: "Off-season" };
   };
 
@@ -238,12 +236,11 @@ const CTAButton = () => {
     }
 
     const season = getSeason(selectedDate);
-    console.log("Selected season:", season);
+    // console.log("Selected season:", season);
 
     const weekday = selectedDate.getDay(); // 0=Sunday ... 6=Saturday
-    console.log("Selected weekday:", weekday);
+    // console.log("Selected weekday:", weekday);
 
-    // Fiyatı bul: Off-season için season.id = null
     const priceRow = prices.find(
       (p) =>
         p.package_id === selectedPackage.id &&
@@ -251,7 +248,7 @@ const CTAButton = () => {
         p.weekday === weekday,
     );
 
-    console.log("Matched price row:", priceRow);
+    // console.log("Matched price row:", priceRow);
 
     if (!priceRow) {
       setTotalPrice(null);
@@ -270,6 +267,7 @@ const CTAButton = () => {
 
     const { name, email, guests } = formData;
 
+    // 1️⃣ Form validation
     if (!name || !email || !selectedDate || !guests || !selectedPackage) {
       showAlert("empty", "Please fill in all required fields.");
       return;
@@ -301,7 +299,6 @@ const CTAButton = () => {
     }
 
     const weekday = selectedDate.getDay();
-
     const validPrice = prices.find(
       (p) =>
         p.package_id === selectedPackage.id &&
@@ -322,63 +319,53 @@ const CTAButton = () => {
     const day = String(selectedDate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
 
-    const { data: existing } = await supabase
+    const { data: booking, error } = await supabase
       .from("bookings")
-      .select("id, total_people, package_id")
-      .eq("booking_date", formattedDate)
-      .in("status", ["pending", "confirmed"]);
+      .insert([
+        {
+          package_id: selectedPackage.id,
+          booking_date: formattedDate,
+          season: season.season_type,
+          total_people: Number(guests),
+          total_price: totalPrice,
+          status: "pending",
+          extra_info: formData.message,
+          customer_email: formData.email,
+        },
+      ])
+      .select()
+      .single();
 
-    if (selectedPackage.pricing_type === "couple") {
-      // Aynı gün ve aynı paket için zaten bir rezervasyon var mı?
-      const existingCouple = existing?.find(
-        (b) => b.package_id === selectedPackage.id,
-      );
-      if (existingCouple) {
-        showAlert(
-          "failure",
-          "Selected date is already booked for this Couple package.",
-        );
-        return;
-      }
-    } else {
-      // Grup paketleri: toplam kişi sayısı kontrolü
-      const total = existing?.reduce((sum, b) => sum + b.total_people, 0) || 0;
-      if (total + Number(guests) > 6) {
-        showAlert("failure", "Boat capacity (6 people) exceeded.");
-        return;
-      }
-    }
-
-    const { error } = await supabase.from("bookings").insert([
-      {
-        package_id: selectedPackage.id,
-        booking_date: formattedDate,
-        season: season.season_type,
-        total_people: Number(guests),
-        total_price: totalPrice,
-        status: "pending",
-        extra_info: formData.message,
-      },
-    ]);
-
-    if (error) {
-      showAlert("failure", error.message);
+    if (error || !booking) {
+      showAlert("failure", error?.message || "Booking could not be created.");
       return;
     }
 
-    setOpen(false);
-    setSelectedDate(undefined);
-    setSelectedPackage(null);
-    setTotalPrice(null);
+    try {
+      const response = await fetch(
+        "https://rvtconishhtvhdumkubu.functions.supabase.co/create-checkout-session",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reservationId: booking.id,
+            amount: totalPrice! * 100,
+            customer_email: formData.email,
+          }),
+        },
+      );
 
-    setFormData({
-      name: "",
-      email: "",
-      guests: "",
-      message: "",
-    });
+      const data = await response.json();
 
-    showAlert("success", "Booking request created successfully.");
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        showAlert("failure", "The Stripe session could not be created.");
+      }
+    } catch (err) {
+      console.error(err);
+      showAlert("failure", "An error occurred during the Stripe session.");
+    }
   };
 
   return (
