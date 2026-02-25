@@ -9,7 +9,9 @@ export default function AdminPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       if (!user) {
         setLoading(false);
@@ -32,7 +34,14 @@ export default function AdminPage() {
     checkUser();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen w-full bg-white flex flex-col items-center justify-center text-black">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-blue-600 mb-4"></div>
+        <p className="text-lg font-medium">Verifying admin access...</p>
+      </div>
+    );
+  }
 
   if (!isAdmin) {
     return <AdminLogin onLoginSuccess={() => window.location.reload()} />;

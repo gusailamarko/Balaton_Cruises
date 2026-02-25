@@ -380,98 +380,115 @@ const CTAButton = () => {
       </div>
 
       <Modal open={open} onClose={() => setOpen(false)}>
-        <span onClick={() => setOpen(false)} className="modalClose">
-          X
-        </span>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl p-6 md:p-8">
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-4 right-4 
+             w-10 h-10 flex items-center justify-center
+             rounded-full
+             text-gray-600 
+             hover:bg-red-600 hover:text-white
+             transition duration-200
+             cursor-pointer text-xl font-bold"
+            >
+              ✕
+            </button>
 
-        <div className="modalTitle">
-          <h1 className="text-center text-[2rem] font-bold">Booking Request</h1>
-        </div>
-
-        <form className="flex flex-col gap-3 mt-5" onSubmit={handleSubmit}>
-          <input
-            className="inputField"
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Your Name"
-            required
-          />
-
-          <input
-            className="inputField"
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Your Email"
-            required
-          />
-
-          <DayPicker
-            mode="single"
-            selected={selectedDate}
-            onSelect={setSelectedDate}
-            disabled={(date) => !isDateSelectable(date)}
-            modifiers={{
-              available: (date) => selectedPackage && isDateSelectable(date),
-              seasonless: (date) => !getSeason(date)?.id,
-              full: fullDates,
-            }}
-            modifiersClassNames={{
-              available: "bg-green-500 text-white",
-              seasonless: "bg-red-400 text-white",
-              full: "bg-red-600 text-white cursor-not-allowed",
-            }}
-          />
-
-          <select
-            className="inputField"
-            value={selectedPackage?.id || ""}
-            onChange={(e) =>
-              setSelectedPackage(
-                packages.find((p) => p.id === e.target.value) || null,
-              )
-            }
-          >
-            <option value="">Select Package</option>
-            {packages.map((pkg) => (
-              <option key={pkg.id} value={pkg.id}>
-                {pkg.name}
-              </option>
-            ))}
-          </select>
-
-          <input
-            className="inputField"
-            type="number"
-            name="guests"
-            value={formData.guests}
-            onChange={handleChange}
-            min={selectedPackage?.min_people || 1}
-            max={selectedPackage?.max_people || undefined}
-            placeholder="Number of People"
-            required
-          />
-
-          {totalPrice !== null && (
-            <div className="text-lg font-bold text-center">
-              Total Price: €{totalPrice}
+            <div className="modalTitle">
+              <h1 className="text-center text-[2rem] font-bold">
+                Booking Request
+              </h1>
             </div>
-          )}
 
-          <textarea
-            className="inputField"
-            name="message"
-            rows={4}
-            value={formData.message}
-            onChange={handleChange}
-            placeholder="Extra Info"
-          />
+            <form className="flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
+              <input
+                className="inputField"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Your Name"
+                required
+              />
 
-          <input className="submitBtn" type="submit" value="Reserve Now" />
-        </form>
+              <input
+                className="inputField"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Your Email"
+                required
+              />
+              <div className="w-full overflow-x-auto flex justify-center">
+                <DayPicker
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  disabled={(date) => !isDateSelectable(date)}
+                  modifiers={{
+                    available: (date) =>
+                      selectedPackage && isDateSelectable(date),
+                    seasonless: (date) => !getSeason(date)?.id,
+                    full: fullDates,
+                  }}
+                  modifiersClassNames={{
+                    available: "bg-green-500 text-white",
+                    seasonless: "bg-red-400 text-white",
+                    full: "bg-red-600 text-white cursor-not-allowed",
+                  }}
+                />
+              </div>
+
+              <select
+                className="inputField"
+                value={selectedPackage?.id || ""}
+                onChange={(e) =>
+                  setSelectedPackage(
+                    packages.find((p) => p.id === e.target.value) || null,
+                  )
+                }
+              >
+                <option value="">Select Package</option>
+                {packages.map((pkg) => (
+                  <option key={pkg.id} value={pkg.id}>
+                    {pkg.name}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                className="inputField"
+                type="number"
+                name="guests"
+                value={formData.guests}
+                onChange={handleChange}
+                min={selectedPackage?.min_people || 1}
+                max={selectedPackage?.max_people || undefined}
+                placeholder="Number of People"
+                required
+              />
+
+              {totalPrice !== null && (
+                <div className="text-lg font-bold text-center">
+                  Total Price: €{totalPrice}
+                </div>
+              )}
+
+              <textarea
+                className="inputField"
+                name="message"
+                rows={4}
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Extra Info"
+              />
+
+              <input className="submitBtn" type="submit" value="Reserve Now" />
+            </form>
+          </div>
+        </div>
       </Modal>
 
       <Alert

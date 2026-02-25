@@ -3,12 +3,14 @@ import { supabase } from "~/lib/supabase";
 
 interface Booking {
   id: string;
-  name: string;
-  email: string;
-  date: string;
-  amount: number;
-  payment_status: string;
+  booking_date: string;
+  season: string;
+  status: string;
+  total_people: number;
+  total_price: number;
   created_at: string;
+  extra_info: string | null;
+  customer_email: string;
 }
 
 const AdminDashboard = () => {
@@ -38,32 +40,39 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div style={{ maxWidth: 1000, margin: "60px auto" }}
-    className="bg-white text-black"
-    >
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h1>Admin Dashboard</h1>
-        <button onClick={handleLogout} className="cursor-pointer hover:bg-red-500">Logout</button>
+    <div className="min-h-screen bg-white text-black p-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
+        >
+          Logout
+        </button>
       </div>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
+      <table className="w-full border border-gray-300">
+        <thead className="bg-gray-100">
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Status</th>
+            <th className="border p-2">Date</th>
+            <th className="border p-2">Email</th>
+            <th className="border p-2">Season</th>
+            <th className="border p-2">People</th>
+            <th className="border p-2">Price</th>
+            <th className="border p-2">Status</th>
+            <th className="border p-2">Extra Info</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map((b) => (
             <tr key={b.id}>
-              <td>{b.name}</td>
-              <td>{b.email}</td>
-              <td>{b.date}</td>
-              <td>€{b.amount}</td>
-              <td>{b.payment_status}</td>
+              <td className="border p-2">{b.booking_date}</td>
+              <td className="border p-2">{b.customer_email}</td>
+              <td className="border p-2">{b.season}</td>
+              <td className="border p-2">{b.total_people}</td>
+              <td className="border p-2">€{b.total_price}</td>
+              <td className="border p-2">{b.status}</td>
+              <td className="border p-2">{b.extra_info || "-"}</td>
             </tr>
           ))}
         </tbody>
