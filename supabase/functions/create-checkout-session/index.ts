@@ -37,7 +37,7 @@ Deno.serve(async (req: Request) => {
           quantity: 1,
         },
       ],
-      success_url: `${siteUrl}/success`,
+      success_url: `${siteUrl}`,
       cancel_url: `${siteUrl}/cancel`,
       metadata: {
         reservationId,

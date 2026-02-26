@@ -360,6 +360,7 @@ const CTAButton = () => {
       if (data.url) {
         window.location.href = data.url;
       } else {
+        console.error(data.url);
         showAlert("failure", "The Stripe session could not be created.");
       }
     } catch (err) {
