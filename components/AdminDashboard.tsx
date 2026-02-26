@@ -40,9 +40,9 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+    <div className="min-h-screen bg-white text-black p-4 md:p-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold">Admin Dashboard</h1>
         <button
           onClick={handleLogout}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
@@ -51,32 +51,35 @@ const AdminDashboard = () => {
         </button>
       </div>
 
-      <table className="w-full border border-gray-300">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border p-2">Date</th>
-            <th className="border p-2">Email</th>
-            <th className="border p-2">Season</th>
-            <th className="border p-2">People</th>
-            <th className="border p-2">Price</th>
-            <th className="border p-2">Status</th>
-            <th className="border p-2">Extra Info</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map((b) => (
-            <tr key={b.id}>
-              <td className="border p-2">{b.booking_date}</td>
-              <td className="border p-2">{b.customer_email}</td>
-              <td className="border p-2">{b.season}</td>
-              <td className="border p-2">{b.total_people}</td>
-              <td className="border p-2">€{b.total_price}</td>
-              <td className="border p-2">{b.status}</td>
-              <td className="border p-2">{b.extra_info || "-"}</td>
+      {/* Responsive table wrapper */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-300 text-sm md:text-base">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border p-2">Date</th>
+              <th className="border p-2">Email</th>
+              <th className="border p-2">Season</th>
+              <th className="border p-2">People</th>
+              <th className="border p-2">Price</th>
+              <th className="border p-2">Status</th>
+              <th className="border p-2">Extra Info</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {bookings.map((b) => (
+              <tr key={b.id} className="hover:bg-gray-50">
+                <td className="border p-2 whitespace-nowrap">{b.booking_date}</td>
+                <td className="border p-2 whitespace-nowrap">{b.customer_email}</td>
+                <td className="border p-2 whitespace-nowrap">{b.season}</td>
+                <td className="border p-2 whitespace-nowrap">{b.total_people}</td>
+                <td className="border p-2 whitespace-nowrap">€{b.total_price}</td>
+                <td className="border p-2 whitespace-nowrap">{b.status}</td>
+                <td className="border p-2">{b.extra_info || "-"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
