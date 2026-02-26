@@ -19,6 +19,7 @@ Deno.serve(async (req: Request) => {
   try {
     const body = await req.json();
     const { amount, reservationId, customer_email } = body;
+    const siteUrl = Deno.env.get("SITE_URL")!;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -36,8 +37,8 @@ Deno.serve(async (req: Request) => {
           quantity: 1,
         },
       ],
-      success_url: "http://localhost:5173",
-      cancel_url: "http://localhost:5173/cancel",
+      success_url: `${siteUrl}/success`,
+      cancel_url: `${siteUrl}/cancel`,
       metadata: {
         reservationId,
       },
