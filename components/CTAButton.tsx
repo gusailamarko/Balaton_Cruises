@@ -83,7 +83,8 @@ const CTAButton = () => {
       const bookingsForDay = allBookings.filter(
         (b) =>
           b.package_id === selectedPackage.id &&
-          b.booking_date === date.toISOString().split("T")[0],
+          b.booking_date === date.toISOString().split("T")[0] &&
+          (b.status === "pending" || b.status === "confirmed"),
       );
       if (bookingsForDay.length > 0) return false;
     }
